@@ -1,0 +1,28 @@
+
+	index index.php index.html;
+
+        gzip_static on;
+
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+
+        location ~* (\.map|\.map\;)$ {
+                deny all;
+        }
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+        include fastcgi_params;
+        #fastcgi_param HTTPS on;
+        fastcgi_param SCRIPT_FILENAME $request_filename;
+        fastcgi_intercept_errors on;
+        fastcgi_pass unix:/var/run/php-fpm.sock;
+    }
